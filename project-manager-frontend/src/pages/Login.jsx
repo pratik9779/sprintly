@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import AuthForm from "../components/AuthForm"
 import { Link, useNavigate } from "react-router-dom"
 import useAxios from "../hooks/useAxios"
@@ -14,10 +15,15 @@ const Login = () => {
                 userName: username,
                 email: email,
                 password: password,
-                role: "employee"
             }
         })
     }
+
+    useEffect(() => {
+        if (response) {
+            navigate("/home");
+        }
+    }, [response, navigate]);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
