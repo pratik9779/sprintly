@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import AuthForm from "@/components/AuthForm"
 import { Link, useNavigate } from "react-router-dom"
 import useAxios from "../hooks/useAxios"
@@ -18,6 +19,13 @@ const Register = () => {
             }
         })
     }
+
+    useEffect(() => {
+        console.log(response)
+        if (response) {
+            navigate("/home");
+        }
+    }, [response, navigate]);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">

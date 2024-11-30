@@ -33,6 +33,9 @@ const useAxios = () => {
     const fetchData = async ({ url, method, data = {}, params = {} }) => {
         setLoading(true)
 
+        setError(null);
+        setResponse(null);
+
         controller.abort()
         controller = new AbortController()
 
@@ -44,13 +47,17 @@ const useAxios = () => {
                 params,
                 signal: controller.signal
             })
+            setError(null)
             setResponse(result.data)
+
         } catch (err) {
             if (axios.isCancel(error)) {
-                console.error("Request is been cancelled", err.message)
+                console.warn("Request is been cancelled", error.message)
             } else {
-                setError(err.response ? err.response.data.message : err.message)
+                setResponse(null);
+                setError(err.response?.data?.message || "An error occurred");
             }
+
         } finally {
             setLoading(false)
         }
