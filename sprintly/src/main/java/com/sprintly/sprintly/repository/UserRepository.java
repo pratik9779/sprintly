@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    //    User findByUsername(String username);  // cannot use orElse in this.
     Optional<User> findByUsername(String username);  // with optional, we can use orElse.
+    Optional<User> findByEmailID(String email);
 
 }
