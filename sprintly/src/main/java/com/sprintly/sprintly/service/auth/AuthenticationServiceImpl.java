@@ -28,18 +28,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public User registerUser(RegisterUserDto registerUserDto) {
-        log.info("Attempting to create user with username: {}", registerUserDto.getUsername());
+        log.info("Attempting to create user with emailID: {}", registerUserDto.getEmailID());
 
-        if (userRepository.findByUsername(registerUserDto.getUsername()).isPresent()) {
-            log.warn("User with username {} already exists", registerUserDto.getUsername());
+        if (userRepository.findByEmailID(registerUserDto.getEmailID()).isPresent()) {
+            log.warn("User with email {} already exists", registerUserDto.getEmailID());
             throw new UserAlreadyPresent("User Already present");
         }
 
         User user = User
                 .builder()
+                .firstName(registerUserDto.getFirstName())
+                .lastName(registerUserDto.getLastName())
                 .password(passwordEncoder.encode(registerUserDto.getPassword()))
-                .username(registerUserDto.getUsername())
                 .emailID(registerUserDto.getEmailID())
+                .enabled(true)
                 .build();
 
         userRepository.save(user);
@@ -47,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return user;
     }
 
-    // DaoAuthenticationProvider is responsible for feting user fron UserDetailsSrvice
+    // DaoAuthenticationProvider is responsible for feting user from UserDetailsService
     public User authenticate(LoginUserDto loginUserDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

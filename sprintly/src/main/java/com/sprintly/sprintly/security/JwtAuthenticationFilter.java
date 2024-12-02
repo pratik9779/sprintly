@@ -1,4 +1,4 @@
-package com.sprintly.sprintly.config;
+package com.sprintly.sprintly.security;
 
 
 import com.sprintly.sprintly.service.auth.JwtService;

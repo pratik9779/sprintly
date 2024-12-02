@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 @Log4j2
 public class AuthenticationController {
 
@@ -29,14 +29,15 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         LoginResponse loginResponse = LoginResponse.builder()
                 .expiresIn(jwtService.getExpirationTime())
                 .token(jwtToken)
-                .emailID(loginUserDto.getEmailID())
+                .emailID(authenticatedUser.getEmailID())
+                .firstName(authenticatedUser.getFirstName())
+                .lastName(authenticatedUser.getLastName())
                 .build();
         return ResponseEntity.ok(loginResponse);
     }
