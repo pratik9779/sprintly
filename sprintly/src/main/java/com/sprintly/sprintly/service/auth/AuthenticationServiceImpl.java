@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return user;
     }
 
-    // DaoAuthenticationProvider is responsible for feting user fron UserDetailsSrvice
+    // DaoAuthenticationProvider is responsible for feting user from UserDetailsService
     public User authenticate(LoginUserDto loginUserDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

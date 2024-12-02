@@ -1,4 +1,4 @@
-package com.sprintly.sprintly.config;
+package com.sprintly.sprintly.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,10 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import org.springframework.web.cors.CorsConfigurationSource;
-//import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -34,12 +32,10 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity.
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/register").permitAll() // Add /create/user here.
-                        .requestMatchers("/user/login").permitAll() // Add /create/user here.
+                        .requestMatchers("/auth/**").permitAll() // Add /create/user here.
                         .anyRequest().authenticated() // All other requests require authentication.
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Use stateless sessions.
-//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .httpBasic(Customizer.withDefaults()) // Enable basic authentication (optional).
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -47,7 +43,6 @@ public class SecurityConfiguration {
     }
 
 
-    // Imports are of non-reactive
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
