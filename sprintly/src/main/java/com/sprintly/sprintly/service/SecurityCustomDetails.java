@@ -15,9 +15,8 @@ public class SecurityCustomDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        userRepository.existsById(1L);  // this is default method
-
-        return userRepository.findByUsername(username)
+        
+        return userRepository.findByEmailID(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 }

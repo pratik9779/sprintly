@@ -18,14 +18,8 @@ public class ApplicationConfiguration {
     @Autowired
     private UserRepository userRepository;
 
-//    public ApplicationConfiguration(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-
     @Bean
     public UserDetailsService userDetailsService() {
-//        return username -> userRepository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return email -> userRepository.findByEmailID(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
@@ -41,9 +35,12 @@ public class ApplicationConfiguration {
     }
 
 
-    // authenticationManger.authenticate() request is delighted here
+    //    AuthenticationManger.authenticate() request is delighted here
+    //    The DaoAuthenticationProvider uses the UserDetailsService to load the user and the PasswordEncoder to compare the stored and provided passwords.
     @Bean
     public AuthenticationProvider authenticationProvider() {
+
+        System.out.println("Daw Object creation");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService());
