@@ -1,24 +1,47 @@
 import './App.css'
-import Header from './components/Header'
+import { Suspense, lazy } from 'react'
+import { Route, Routes } from "react-router-dom";
+import { pageRoutes } from "./routes/routes";
+import Layout from './components/Layout';
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const ErrorPage = lazy(() => import('./pages/error'));
 
 function App() {
-
-  return (
-    <>
-      {/* header */}
-      <Header />
-
-      <main className='min-h-screen'>
-        {/* main content */}
-      </main>
-
-      <footer className='bg-gray-900 py-4'>
-        <div className='container mx-auto px-4 text-center text-gray-200'>
-          <p>Made by Pratik Sawant</p>
-        </div>
-      </footer>
-    </>
+  const fallbackLoader = (
+    <div className='flex justify-center items-center h-screen'>
+      {/* <Loader /> */}
+      Loading...
+    </div>
   )
+
+  const SuspenseComponent = (element) => {
+    return <Suspense fallback={fallbackLoader}>{element}</Suspense>
+  }
+
+  const authRoutes = [
+    { path: pageRoutes.LOGIN, component: <Login /> },
+    { path: pageRoutes.REGISTER, component: <Register /> },
+  ]
+
+  const routes = [
+    { path: pageRoutes.DASHBOARD, component: <Dashboard /> },
+  ]
+
+  return <Routes>
+    {authRoutes.map(({ path, component }) => (
+      <Route key={path} path={path} element={SuspenseComponent(component)} />
+    ))}
+
+    <Route element={<Layout />}>
+      {routes.map(({ path, component }) => (
+        <Route key={path} path={path} element={SuspenseComponent(component)} />
+      ))}
+    </Route>
+
+    <Route path='/*' element={SuspenseComponent(<ErrorPage />)} />
+  </Routes>;
 }
 
 export default App

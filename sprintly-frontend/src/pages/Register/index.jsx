@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react'
-import AuthForm from "../components/AuthForm"
+import { useEffect } from 'react'
+import AuthForm from "../../components/AuthForm"
 import { Link, useNavigate } from "react-router-dom"
-import useAxios from "../hooks/useAxios"
+import useAxios from "../../hooks/useAxios"
 
-const Login = () => {
+const Register = () => {
     const { response, error, loading, fetchData } = useAxios();
     const navigate = useNavigate()
 
-    const loginUser = ({ username, email, password }) => {
+    const registerUser = ({ username, email, password }) => {
         fetchData({
-            url: "/login",
+            url: "/register",
             method: "POST",
             data: {
                 userName: username,
                 email: email,
                 password: password,
+                role: "employee"
             }
         })
     }
 
     useEffect(() => {
+        console.log(response)
         if (response) {
-            navigate("/home");
+            navigate("/");
         }
     }, [response, navigate]);
 
@@ -30,19 +32,19 @@ const Login = () => {
             <section className="w-4/5 max-w-5xl">
                 {loading && <p>Loading...</p>}
                 <div className="mb-8 flex flex-col gap-2">
-                    <h1 className="text-3xl font-semibold">Login</h1>
+                    <h1 className="text-3xl font-semibold">Register</h1>
                     <p className="text-sm text-neutral-500">
-                        New here?{" "}
-                        <Link to="/register" className="underline underline-offset-4">
-                            Create an account
+                        Already have an account?{" "}
+                        <Link to="/login" className="underline underline-offset-4">
+                            Login
                         </Link>
                     </p>
                 </div>
-                <AuthForm formtype="Login" loginUser={loginUser} />
+                <AuthForm formtype="Register" registerUser={registerUser} />
                 {error && <p className="text-red">{error}</p>}
             </section>
         </main>
     )
 }
 
-export default Login
+export default Register

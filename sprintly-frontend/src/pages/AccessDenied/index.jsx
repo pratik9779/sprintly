@@ -1,7 +1,7 @@
 
 const AccessDenied = () => {
     return (
-        <div>AccessDenied 404</div>
+        <div>AccessDenied</div>
     )
 }
 
