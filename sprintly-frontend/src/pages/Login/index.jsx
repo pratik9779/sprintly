@@ -2,9 +2,11 @@ import { useEffect } from 'react'
 import AuthForm from "../../components/AuthForm"
 import { Link, useNavigate } from "react-router-dom"
 import useAxios from "../../hooks/useAxios"
+import useAuth from "../../hooks/useAuth"
 
 const Login = () => {
     const { response, error, loading, fetchData } = useAxios();
+    const { isAuthenticated, setIsAuthenticated, authloading, setAuthLoading } = useAuth();
     const navigate = useNavigate()
 
     const loginUser = ({ username, email, password }) => {
@@ -21,6 +23,7 @@ const Login = () => {
 
     useEffect(() => {
         if (response) {
+            setIsAuthenticated(true);
             navigate("/");
         }
     }, [response, navigate]);

@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react'
 import { Route, Routes } from "react-router-dom";
 import { pageRoutes } from "./routes/routes";
 import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -36,7 +37,7 @@ function App() {
 
     <Route element={<Layout />}>
       {routes.map(({ path, component }) => (
-        <Route key={path} path={path} element={SuspenseComponent(component)} />
+        <Route key={path} path={path} element={<ProtectedRoute>{SuspenseComponent(component)}</ProtectedRoute>} />
       ))}
     </Route>
 
