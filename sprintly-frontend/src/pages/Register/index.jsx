@@ -7,13 +7,13 @@ const Register = () => {
     const { response, error, loading, fetchData } = useAxios();
     const navigate = useNavigate()
 
-    const registerUser = ({ username, email, password }) => {
+    const registerUser = ({ emailID, password }) => {
         fetchData({
             url: "/register",
             method: "POST",
             data: {
-                userName: username,
-                email: email,
+                // userName: username,
+                emailID: emailID,
                 password: password,
                 role: "employee"
             }

@@ -9,13 +9,13 @@ const Login = () => {
     const { isAuthenticated, setIsAuthenticated, authloading, setAuthLoading } = useAuth();
     const navigate = useNavigate()
 
-    const loginUser = ({ username, email, password }) => {
+    const loginUser = ({ emailID, password }) => {
         fetchData({
             url: "/login",
             method: "POST",
             data: {
-                userName: username,
-                email: email,
+                // userName: username,
+                emailID: emailID,
                 password: password,
             }
         })

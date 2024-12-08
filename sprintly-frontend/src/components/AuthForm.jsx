@@ -15,8 +15,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-    email: z.string().email(),
-    username: z.string().min(3).max(50),
+    emailID: z.string().email(),
+    // username: z.string().min(3).max(50),
     password: z.string().min(8),
 });
 
@@ -24,8 +24,8 @@ const AuthForm = ({ formtype, registerUser = {}, loginUser = {} }) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "",
-            username: "",
+            emailID: "",
+            // username: "",
             password: "",
         },
     });
@@ -38,19 +38,19 @@ const AuthForm = ({ formtype, registerUser = {}, loginUser = {} }) => {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <AuthFormField
-                    name="email"
+                    name="emailID"
                     label="Email"
                     placeholder="Email"
-                    inputType="email"
+                    inputType="emailID"
                     formControl={form.control}
                 />
-                <AuthFormField
+                {/* <AuthFormField
                     name="username"
                     label="Username"
                     placeholder="Username"
                     description="At least 3 characters."
                     formControl={form.control}
-                />
+                /> */}
                 <AuthFormField
                     name="password"
                     label="Password"
