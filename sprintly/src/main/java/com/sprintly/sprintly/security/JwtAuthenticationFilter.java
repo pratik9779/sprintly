@@ -20,6 +20,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
+// To read request headers only once
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
