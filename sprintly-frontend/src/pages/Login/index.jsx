@@ -11,7 +11,7 @@ const Login = () => {
 
     const loginUser = ({ emailID, password }) => {
         fetchData({
-            url: "/login",
+            url: "/auth/login",
             method: "POST",
             data: {
                 // userName: username,
@@ -23,6 +23,7 @@ const Login = () => {
 
     useEffect(() => {
         if (response) {
+            localStorage.setItem('token', response.token);
             setIsAuthenticated(true);
             navigate("/");
         }
