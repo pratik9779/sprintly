@@ -22,6 +22,11 @@ const Login = () => {
     }
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate("/");
+        }
+
         if (response) {
             localStorage.setItem('token', response.token);
             setIsAuthenticated(true);
