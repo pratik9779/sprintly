@@ -35,7 +35,7 @@ function App() {
       <Route key={path} path={path} element={SuspenseComponent(component)} />
     ))}
 
-    <Route element={<Layout />}>
+    <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
       {routes.map(({ path, component }) => (
         <Route key={path} path={path} element={<ProtectedRoute>{SuspenseComponent(component)}</ProtectedRoute>} />
       ))}

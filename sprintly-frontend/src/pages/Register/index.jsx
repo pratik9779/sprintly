@@ -9,7 +9,7 @@ const Register = () => {
 
     const registerUser = ({ emailID, password }) => {
         fetchData({
-            url: "/register",
+            url: "/auth/register",
             method: "POST",
             data: {
                 // userName: username,
@@ -23,7 +23,7 @@ const Register = () => {
     useEffect(() => {
         console.log(response)
         if (response) {
-            navigate("/");
+            navigate("/login");
         }
     }, [response, navigate]);
 
