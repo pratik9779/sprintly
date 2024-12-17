@@ -1,4 +1,4 @@
-package com.sprintly.sprintly.model;
+package com.sprintly.sprintly.model.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
