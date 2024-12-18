@@ -1,0 +1,15 @@
+@Entity
+public class Office {
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "addressId")
+    //    name = "addressId" indicates that the Office table will have a column named addressId,
+    //    which acts as a foreign key referencing the id column in the Address table.
+    private Address address;
+}
+
+@Entity
+public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+}
