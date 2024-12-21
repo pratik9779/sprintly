@@ -58,10 +58,10 @@ public class User implements UserDetails {
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
-    /* A list of organization will be added of which user is owner of*/
+    /* A list of user_org_role, which user has some rights of*/
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Organization> organizations = new ArrayList<>();
+    private List<UserOrganizationRole> organizationRoles = new ArrayList<>();
 
 
     @Override

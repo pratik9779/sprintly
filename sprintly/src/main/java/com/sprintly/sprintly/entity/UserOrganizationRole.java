@@ -1,7 +1,7 @@
 package com.sprintly.sprintly.entity;
 
+import com.sprintly.sprintly.model.enums.OrganizationRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,30 +10,34 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "ORGANIZATION_DETAILS")
+@Table(name = "USER_ORGANIZATION_ROLE")
 @EntityListeners(AuditingEntityListener.class)
-public class Organization {
+public class UserOrganizationRole {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserOrganizationRole> userRoles = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "organization_id", nullable = false)
+    private Organization organization;
 
-    private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrganizationRole role;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime assignedDate;
+
 }

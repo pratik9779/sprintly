@@ -5,18 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class OrganizationDto {
-
-
+public class OrganizationDeleteDto {
     @NotBlank(message = "Name is required")
     private String name;
 
     @NotBlank(message = "Email ID is required")
     @Email
     private String emailID;
-
-    @NotBlank(message = "Role is required")
-    private String role;
-
-    private String description;
 }
