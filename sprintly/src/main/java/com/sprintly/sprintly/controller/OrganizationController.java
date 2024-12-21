@@ -2,6 +2,8 @@ package com.sprintly.sprintly.controller;
 
 import com.sprintly.sprintly.entity.Organization;
 import com.sprintly.sprintly.entity.User;
+import com.sprintly.sprintly.entity.UserOrganizationRole;
+import com.sprintly.sprintly.model.Organization.OrganizationDeleteDto;
 import com.sprintly.sprintly.model.Organization.OrganizationDto;
 import com.sprintly.sprintly.model.auth.RegisterUserDto;
 import com.sprintly.sprintly.service.organization.OrganizationService;
@@ -25,8 +27,13 @@ public class OrganizationController {
     }
 
     @PostMapping("/all")
-    public List<Organization> getAllOrganizations(@RequestParam String emailID){
-        return organizationService.getAllOrganizations(emailID);
+    public List<UserOrganizationRole> getAllUserOrganizationRole(@RequestParam String emailID){
+        return organizationService.getAllUserOrganizationRole(emailID);
+    }
+
+    @DeleteMapping("/delete/name")
+    public void deleteOrganization(@RequestBody OrganizationDeleteDto organizationDeleteDto){
+        organizationService.deleteOrganization(organizationDeleteDto);
     }
 
 }
