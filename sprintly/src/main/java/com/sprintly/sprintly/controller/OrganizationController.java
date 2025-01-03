@@ -1,14 +1,16 @@
 package com.sprintly.sprintly.controller;
 
 import com.sprintly.sprintly.entity.Organization;
-import com.sprintly.sprintly.entity.User;
 import com.sprintly.sprintly.entity.UserOrganizationRole;
+import com.sprintly.sprintly.exception.custom.CustomException;
 import com.sprintly.sprintly.model.Organization.OrganizationDeleteDto;
 import com.sprintly.sprintly.model.Organization.OrganizationDto;
-import com.sprintly.sprintly.model.auth.RegisterUserDto;
 import com.sprintly.sprintly.service.organization.OrganizationService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class OrganizationController {
     private OrganizationService organizationService;
 
     @PostMapping("/create")
-    public Organization registerUser(@RequestBody OrganizationDto organizationDto) {
+    public Organization createOrganization(@RequestBody OrganizationDto organizationDto) {
         return organizationService.create(organizationDto);
     }
 
@@ -31,8 +33,18 @@ public class OrganizationController {
         return organizationService.getAllUserOrganizationRole(emailID);
     }
 
-    @DeleteMapping("/delete/name")
-    public void deleteOrganization(@RequestBody OrganizationDeleteDto organizationDeleteDto){
+    @DeleteMapping("/delete")
+    public void deleteOrganization(
+            @RequestBody OrganizationDeleteDto organizationDeleteDto,
+            Authentication authentication) {
+
+        String jwtEmail = authentication.getName(); // Typically, the username/email
+        String dtoEmail = organizationDeleteDto.getEmailID();
+
+        if (!jwtEmail.equals(dtoEmail)) {
+            throw new CustomException("Email in JWT does not match email in request.");
+        }
+
         organizationService.deleteOrganization(organizationDeleteDto);
     }
 

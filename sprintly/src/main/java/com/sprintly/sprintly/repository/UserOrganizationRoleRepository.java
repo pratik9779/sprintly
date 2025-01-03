@@ -28,4 +28,10 @@ public interface UserOrganizationRoleRepository extends JpaRepository<UserOrgani
 
     // Optional: Find roles for a specific user and organization
     List<UserOrganizationRole> findByUserAndOrganization(User user, Organization organization);
+
+
+    boolean existsByUserEmailIDAndOrganizationNameAndRole(String emailID, String organizationName, OrganizationRole role);
+
+    void deleteAllByOrganization(Organization organization);
+
 }

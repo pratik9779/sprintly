@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @Log4j2
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;

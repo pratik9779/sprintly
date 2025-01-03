@@ -66,6 +66,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+//        list.add(new GrantedAuthority(ubs_owner)) // orgname_role
         return Collections.emptyList();
     }
 

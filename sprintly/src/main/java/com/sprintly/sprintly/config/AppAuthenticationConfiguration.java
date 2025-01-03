@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Configuration
-public class ApplicationConfiguration {
+public class AppAuthenticationConfiguration {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -33,7 +33,6 @@ public class ApplicationConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider() {
 
-        System.out.println("Daw Object creation");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
