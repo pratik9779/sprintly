@@ -6,6 +6,7 @@ import com.sprintly.sprintly.entity.UserOrganizationRole;
 import com.sprintly.sprintly.exception.custom.CustomException;
 import com.sprintly.sprintly.model.Organization.OrganizationDeleteDto;
 import com.sprintly.sprintly.model.Organization.OrganizationDto;
+import com.sprintly.sprintly.model.Organization.UserOrganizationRoleDTO;
 import com.sprintly.sprintly.model.enums.OrganizationRole;
 import com.sprintly.sprintly.repository.OrganizationRepository;
 import com.sprintly.sprintly.repository.UserOrganizationRoleRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -65,13 +67,17 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<UserOrganizationRole> getAllUserOrganizationRole(String emailID) {
-        User currUser = userRepository
-                .findByEmailID(emailID)
-                .orElseThrow(() ->
-                        new CustomException(String.format("No user with email '%s' found", emailID)));
-        return currUser.getOrganizationRoles();
+    public List<UserOrganizationRoleDTO> getAllUserOrganizationRole(String emailID) {
+        List<UserOrganizationRole> roles = userOrganizationRoleRepository.findByUserEmailID(emailID);
+        return roles.stream()
+                .map(role -> new UserOrganizationRoleDTO(
+                        role.getUser().getEmailID(),
+                        role.getOrganization().getName(),
+                        role.getRole().toString()
+                ))
+                .collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional

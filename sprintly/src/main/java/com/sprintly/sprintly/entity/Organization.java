@@ -23,13 +23,13 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Organization {
 
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     @Id
-    @NotBlank
-    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
     private String name;
+
 
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserOrganizationRole> userRoles = new ArrayList<>();

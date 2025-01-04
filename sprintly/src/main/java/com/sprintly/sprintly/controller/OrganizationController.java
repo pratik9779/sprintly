@@ -1,10 +1,10 @@
 package com.sprintly.sprintly.controller;
 
 import com.sprintly.sprintly.entity.Organization;
-import com.sprintly.sprintly.entity.UserOrganizationRole;
 import com.sprintly.sprintly.exception.custom.CustomException;
 import com.sprintly.sprintly.model.Organization.OrganizationDeleteDto;
 import com.sprintly.sprintly.model.Organization.OrganizationDto;
+import com.sprintly.sprintly.model.Organization.UserOrganizationRoleDTO;
 import com.sprintly.sprintly.service.organization.OrganizationService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,14 @@ public class OrganizationController {
     }
 
     @PostMapping("/all")
-    public List<UserOrganizationRole> getAllUserOrganizationRole(@RequestParam String emailID) {
+    public List<UserOrganizationRoleDTO> getAllUserOrganizationRole(@RequestParam String emailID,
+                                                                    Authentication authentication) {
+
+        String jwtEmail = authentication.getName();
+
+        if (!jwtEmail.equals(emailID)) {
+            throw new CustomException("Email in JWT does not match email in request.");
+        }
         return organizationService.getAllUserOrganizationRole(emailID);
     }
 
@@ -36,7 +43,7 @@ public class OrganizationController {
             @RequestBody OrganizationDeleteDto organizationDeleteDto,
             Authentication authentication) {
 
-        String jwtEmail = authentication.getName(); // Typically, the username/email
+        String jwtEmail = authentication.getName();
         String dtoEmail = organizationDeleteDto.getEmailID();
 
         if (!jwtEmail.equals(dtoEmail)) {

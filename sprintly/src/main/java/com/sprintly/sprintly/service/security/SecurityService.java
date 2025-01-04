@@ -26,7 +26,6 @@ public class SecurityService {
     @Transactional
     public boolean hasOwnerRole(String emailID, String organizationName) {
         List<UserOrganizationRole> list = userOrganizationRoleRepository.listByUserNameAndOrgNameAndUserRole(emailID, organizationName, OrganizationRole.OWNER);
-        System.out.println(list.size());
         return !list.isEmpty();
     }
 

@@ -1,5 +1,6 @@
 package com.sprintly.sprintly.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sprintly.sprintly.model.enums.OrganizationRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,10 +25,12 @@ public class UserOrganizationRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;

@@ -13,6 +13,7 @@ import java.util.List;
 public interface UserOrganizationRoleRepository extends JpaRepository<UserOrganizationRole, Long> {
 
     List<UserOrganizationRole> findByUser(User user);
+//    List<UserOrganizationRole> findByUserEmailID(String emailID);
 
     // Find roles by User's email ID
     @Query("SELECT uor FROM UserOrganizationRole uor WHERE uor.user.emailID = :email")
