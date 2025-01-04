@@ -13,5 +13,5 @@ public interface OrganizationService {
 
     public List<UserOrganizationRole> getAllUserOrganizationRole(String emailID);
 
-    public void deleteOrganization(OrganizationDeleteDto name);
+    public String deleteOrganization(OrganizationDeleteDto name);
 }

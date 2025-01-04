@@ -30,8 +30,26 @@ public interface UserOrganizationRoleRepository extends JpaRepository<UserOrgani
     List<UserOrganizationRole> findByUserAndOrganization(User user, Organization organization);
 
 
-    boolean existsByUserEmailIDAndOrganizationNameAndRole(String emailID, String organizationName, OrganizationRole role);
+//    boolean existsByUserEmailIDAndOrganizationNameAndRole(String emailID, String organizationName, OrganizationRole role);
 
     void deleteAllByOrganization(Organization organization);
+
+    //    @Query("""
+//            SELECT ur
+//            FROM UserOrganizationRole ur
+//            LEFT JOIN ur.organization o ON o.name = :organizationName
+//            LEFT JOIN ur.user u ON u.emailID = :emailID
+//            WHERE ur.role = :role
+//            """)
+    @Query("""
+            SELECT ur
+            FROM UserOrganizationRole ur
+            JOIN FETCH ur.user u
+            JOIN FETCH ur.organization o
+            WHERE u.emailID = :emailID
+              AND o.name = :organizationName
+              AND ur.role = :role
+            """)
+    List<UserOrganizationRole> listByUserNameAndOrgNameAndUserRole(String emailID, String organizationName, OrganizationRole role);
 
 }

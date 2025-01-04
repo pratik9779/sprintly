@@ -8,9 +8,7 @@ import com.sprintly.sprintly.model.Organization.OrganizationDto;
 import com.sprintly.sprintly.service.organization.OrganizationService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,12 +27,12 @@ public class OrganizationController {
     }
 
     @PostMapping("/all")
-    public List<UserOrganizationRole> getAllUserOrganizationRole(@RequestParam String emailID){
+    public List<UserOrganizationRole> getAllUserOrganizationRole(@RequestParam String emailID) {
         return organizationService.getAllUserOrganizationRole(emailID);
     }
 
     @DeleteMapping("/delete")
-    public void deleteOrganization(
+    public String deleteOrganization(
             @RequestBody OrganizationDeleteDto organizationDeleteDto,
             Authentication authentication) {
 
@@ -45,7 +43,7 @@ public class OrganizationController {
             throw new CustomException("Email in JWT does not match email in request.");
         }
 
-        organizationService.deleteOrganization(organizationDeleteDto);
+        return organizationService.deleteOrganization(organizationDeleteDto);
     }
 
 }
