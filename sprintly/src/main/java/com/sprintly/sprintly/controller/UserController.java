@@ -4,7 +4,7 @@ import com.sprintly.sprintly.entity.User;
 import com.sprintly.sprintly.model.auth.LoginResponse;
 import com.sprintly.sprintly.model.auth.LoginUserDto;
 import com.sprintly.sprintly.model.auth.RegisterUserDto;
-import com.sprintly.sprintly.service.auth.AuthenticationService;
+import com.sprintly.sprintly.service.auth.UserService;
 import com.sprintly.sprintly.service.auth.JwtService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @Log4j2
-public class AuthenticationController {
+public class UserController {
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private UserService userService;
 
     @Autowired
     private JwtService jwtService;
 
     @PostMapping("/register")
     public User registerUser(@RequestBody RegisterUserDto registerUserDto) {
-        return authenticationService.registerUser(registerUserDto);
+        return userService.registerUser(registerUserDto);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+        User authenticatedUser = userService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         LoginResponse loginResponse = LoginResponse.builder()

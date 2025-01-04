@@ -6,7 +6,7 @@ import com.sprintly.sprintly.model.auth.RegisterUserDto;
 
 import java.util.List;
 
-public interface AuthenticationService {
+public interface UserService {
 
     User registerUser(RegisterUserDto registerUserDto);
     User authenticate(LoginUserDto input);

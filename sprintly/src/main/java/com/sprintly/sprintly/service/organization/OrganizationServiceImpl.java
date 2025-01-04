@@ -13,6 +13,7 @@ import com.sprintly.sprintly.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,7 +33,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     private UserOrganizationRoleRepository userOrganizationRoleRepository;
 
     @Override
-    @Transactional // Without @Transactional, if one save operation fails, the other might still persist, causing partial updates.
+    @Transactional
+    // Without @Transactional, if one save operation fails, the other might still persist, causing partial updates.
     public Organization create(OrganizationDto organizationDto) {
 
         User currUser = userRepository
@@ -48,16 +50,16 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .description(organizationDto.getDescription() == null ? "" : organizationDto.getDescription())
                 .build();
 
+        organizationRepository.save(organization);
 
         UserOrganizationRole userOrganizationRole =
                 UserOrganizationRole
-                .builder()
+                        .builder()
                         .user(currUser)
                         .organization(organization)
-                        // also Include Admin (Who has the right to create projects)
-                        .role(organizationDto.getRole().equals("OWNER") ? OrganizationRole.OWNER : OrganizationRole.MEMBER)
+                        .role(OrganizationRole.OWNER) // whoever is creating org is owner
                         .assignedDate(LocalDateTime.now())
-                .build();
+                        .build();
         userOrganizationRoleRepository.save(userOrganizationRole);
         return organization;
     }
@@ -73,25 +75,18 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional
-    public void deleteOrganization(OrganizationDeleteDto dto) {
-        String orgName = dto.getName();
-        String userEmail = dto.getEmailID();
-        List<UserOrganizationRole> list = userOrganizationRoleRepository.findByUserEmailID(userEmail);
+    @PreAuthorize("@securityService.hasOwnerRole(#dto.emailID, #dto.name)")
+    public String deleteOrganization(OrganizationDeleteDto dto) {
+        Organization organization = organizationRepository.findByName(dto.getName())
+                .orElseThrow(() -> new IllegalArgumentException("Organization not found"));
 
-        for (UserOrganizationRole uor : list) {
-            if (uor.getOrganization().getName().equals(orgName) && uor.getRole() == OrganizationRole.OWNER) {
-                // Delete the organization
-                organizationRepository.delete(uor.getOrganization());
-                log.info("Organization successfully deleted");
+        organizationRepository.delete(organization);
 
-                // Delete all associated roles for the organization
-                userOrganizationRoleRepository.deleteAll(
-                        userOrganizationRoleRepository.findByOrganization(uor.getOrganization())
-                );
+        // Cascade delete roles associated with the organization
+        userOrganizationRoleRepository.deleteAllByOrganization(organization);
 
-                return; // Exit the loop after successful deletion
-            }
-        }
-        log.info("You are not the owner or organization does not exist");
+        log.info("Organization successfully deleted");
+        return String.format("Successfully deleted Organization %s", organization.getName());
+
     }
 }

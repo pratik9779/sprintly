@@ -32,12 +32,15 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity.
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Add /create/user here.
+                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/organization/delete").hasRole("_OWNER")
+
                         .anyRequest().authenticated() // All other requests require authentication.
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Use stateless sessions.
                 .httpBasic(Customizer.withDefaults()) // Enable basic authentication (optional).
                 .authenticationProvider(authenticationProvider)
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
